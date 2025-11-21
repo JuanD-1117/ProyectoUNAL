@@ -32,11 +32,11 @@ La metodología del proyecto seguirá un enfoque iterativo y basado en CripsDM. 
 
 | Etapa | Duración Estimada | Fechas |
 |------|---------|-------|
-| Entendimiento del negocio y carga de datos | 1 semanas | del 23 de junio al 28 de junio del 2025|
-| Preprocesamiento, análisis exploratorio | 2 semanas | del 30 de junio al 12 de julio del 2025|
-| Modelamiento y extracción de características | 1 semanas | del 07 de julio al 12 de julio del 2025|
-| Despliegue | 1 semanas | del 14 de julio al 19 de julio del 2025 |
-| Evaluación y entrega final | 3 semanas | del 07 de julio al 25 de julio del 2025|
+| Entendimiento del negocio y carga de datos | 1 semana | del 13 de noviembre al 20 de noviembre del 2025|
+| Preprocesamiento, análisis exploratorio | 1 semana | del 21 de noviembre al 27 de noviembre del 2025|
+| Modelamiento y extracción de características | 1 semana | del 28 de noviembre al 7 de diciembre del 2025|
+| Validacion y ajustes finales | 1 semana | del 5 de diciembre al 11 de diciembre del 2025 |
+| Evaluación y entrega final | 1 semana | del 11 de diciembre al 13 de diciembre del 2025|
  
 
 ## Equipo del Proyecto
