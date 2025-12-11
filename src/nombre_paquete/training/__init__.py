@@ -200,7 +200,29 @@ def create_datasets(
     val_paths = val_df["image_path"].tolist()
     val_labels = val_df["label_idx"].tolist()
 
+    # -----------------------------------------------------------------
+    # Filtrar rutas que no existan físicamente en disco
+    # -----------------------------------------------------------------
+    def filter_missing(paths, labels):
+        valid_paths, valid_labels = [], []
+        missing = 0
+        for p, y in zip(paths, labels):
+            # Path viene de la columna image_path (ruta absoluta)
+            if Path(p).is_file():
+                valid_paths.append(p)
+                valid_labels.append(y)
+            else:
+                missing += 1
+        if missing > 0:
+            print(f"[WARN] Se ignoraron {missing} imágenes que no existen en disco.")
+        return valid_paths, valid_labels
+
+    train_paths, train_labels = filter_missing(train_paths, train_labels)
+    val_paths, val_labels = filter_missing(val_paths, val_labels)
+
+    # Construir datasets tf.data únicamente con rutas válidas
     train_ds = _make_dataset(train_paths, train_labels, batch_size, training=True)
     val_ds = _make_dataset(val_paths, val_labels, batch_size, training=False)
 
     return train_ds, val_ds, class_to_index, index_to_class
+
