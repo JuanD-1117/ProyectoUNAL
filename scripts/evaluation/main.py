@@ -22,30 +22,38 @@ from __future__ import annotations
 
 import io
 import json
+import sys
 from pathlib import Path
 from typing import Dict
 
 import numpy as np
+import tensorflow as tf
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from PIL import Image
-import tensorflow as tf
 
-from nombre_paquete.training import IMG_SIZE
+# ---------------------------------------------------------------------
+# Asegurar que la carpeta src/ esté en sys.path para poder importar
+# el paquete nombre_paquete sin depender de PYTHONPATH externo.
+# ---------------------------------------------------------------------
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+SRC_DIR = PROJECT_ROOT / "src"
+if str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
 
+# Importar utilidades de entrenamiento (IMG_SIZE, etc.)
+from nombre_paquete.training import IMG_SIZE  # type: ignore[import]
 
 # ---------------------------------------------------------------------
 # Configuración de rutas
 # ---------------------------------------------------------------------
 
-# Este archivo está en: <root>/scripts/evaluation/main.py
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
 MODELS_DIR = PROJECT_ROOT / "models"
 REPORTS_DIR = PROJECT_ROOT / "reports"
 
 # Detectar qué modelo usar: primero EfficientNet, si existe;
-# si no, usar el baseline CNN (coherente con el notebook).
+# si no, usar el baseline CNN.
 EFFICIENTNET_MODEL = MODELS_DIR / "efficientnet_b0.keras"
 BASELINE_MODEL = MODELS_DIR / "baseline_cnn.keras"
 
