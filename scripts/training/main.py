@@ -17,10 +17,20 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import sys
 from pathlib import Path
 from typing import Literal
 
 import tensorflow as tf
+
+# ---------------------------------------------------------------------
+# Asegurar que la carpeta src/ esté en sys.path para poder importar
+# el paquete nombre_paquete sin depender de PYTHONPATH externo.
+# ---------------------------------------------------------------------
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+SRC_DIR = PROJECT_ROOT / "src"
+if str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
 
 from nombre_paquete.training.data_pipeline import (
     IMG_SIZE,
@@ -84,7 +94,11 @@ def build_model(
         model = build_baseline_cnn(input_shape=input_shape, num_classes=num_classes)
     elif model_name == "efficientnet":
         # En primera instancia usamos la base congelada (train_base=False)
-        model = build_efficientnet_b0(input_shape=input_shape, num_classes=num_classes, train_base=False)
+        model = build_efficientnet_b0(
+            input_shape=input_shape,
+            num_classes=num_classes,
+            train_base=False,
+        )
     else:
         raise ValueError(f"Modelo no soportado: {model_name}")
 
