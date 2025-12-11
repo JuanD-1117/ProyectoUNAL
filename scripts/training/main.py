@@ -7,9 +7,9 @@ Uso desde la raíz del proyecto:
     python scripts/training/main.py --model efficientnet --epochs 5
 
 Modelos disponibles:
-- baseline    : CNN sencilla definida en src/nombre_paquete/models/baseline.py
+- baseline    : CNN sencilla definida en src/nombre_paquete/models/__init__.py
 - efficientnet: EfficientNetB0 con transfer learning definida en
-                src/nombre_paquete/models/efficientnet_b0.py
+                src/nombre_paquete/models/model_efficient.py
 """
 
 from __future__ import annotations
@@ -32,13 +32,20 @@ SRC_DIR = PROJECT_ROOT / "src"
 if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
-from nombre_paquete.training.data_pipeline import (
+# Importar el pipeline de datos desde src/nombre_paquete/training/__init__.py
+from nombre_paquete.training import (  # type: ignore[import]
     IMG_SIZE,
     create_datasets,
     get_project_root,
 )
-from nombre_paquete.models.baseline import build_baseline_cnn
-from nombre_paquete.models.efficientnet_b0 import build_efficientnet_b0
+
+# Importar modelos
+from nombre_paquete.models import (  # type: ignore[import]
+    build_baseline_cnn,
+)
+from nombre_paquete.models.model_efficient import (  # type: ignore[import]
+    build_efficientnet_b0,
+)
 
 
 LOGGER = logging.getLogger(__name__)
@@ -54,7 +61,9 @@ def configure_logging() -> None:
 
 def parse_args() -> argparse.Namespace:
     """Parsea argumentos de línea de comandos."""
-    parser = argparse.ArgumentParser(description="Entrenamiento de modelos de galaxias.")
+    parser = argparse.ArgumentParser(
+        description="Entrenamiento de modelos de galaxias."
+    )
     parser.add_argument(
         "--model",
         choices=["baseline", "efficientnet"],
@@ -93,7 +102,7 @@ def build_model(
     if model_name == "baseline":
         model = build_baseline_cnn(input_shape=input_shape, num_classes=num_classes)
     elif model_name == "efficientnet":
-        # En primera instancia usamos la base congelada (train_base=False)
+        # Usamos EfficientNetB0 con la base congelada inicialmente (train_base=False)
         model = build_efficientnet_b0(
             input_shape=input_shape,
             num_classes=num_classes,
